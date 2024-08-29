@@ -42,6 +42,23 @@ app.use(
 
 app.use(morgan("dev"));
 
+app.use((req, res, next) => {
+  console.log(
+    ` // Method: [${req.method}] - Url: [${req.url}] - IP: [${
+      req.socket.remoteAddress
+    }] - Time: [${new Date()}]`
+  );
+
+  res.on("finish", () => {
+    console.log(
+      ` // Method: [${req.method}] - Url: [${req.url}] - IP: [${
+        req.socket.remoteAddress
+      }] - Time: [${new Date()}] - Status: [${res.statusCode}]`
+    );
+  });
+  next();
+});
+
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/admin", adminRoute);
