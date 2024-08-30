@@ -139,8 +139,6 @@ const otpVerification = err.tryCa(async (req, res, next) => {
 
   const otp = await Otp.findOne({ email, category });
 
-  console.log(otp.otp);
-
   if (!otp) {
     return next(new ErrorHandler(HTTP.NOT_FOUND, "OTP not found"));
   }
@@ -281,7 +279,6 @@ const serachUser = err.tryCa(async (req, res, next) => {
   // finding all my chats
   const myChats = await Chats.find({
     groupchat: false,
-    userverified: true,
     member: req.user,
   });
 
@@ -310,8 +307,6 @@ const serachUser = err.tryCa(async (req, res, next) => {
 
 const sendFriendRequest = err.tryCa(async (req, res, next) => {
   const { userId } = req.body;
-
-  console.log(userId);
 
   const request = await Requests.findOne({
     $or: [
@@ -409,7 +404,6 @@ const getMyFriend = err.tryCa(async (req, res, next) => {
   const chat = await Chats.find({
     member: req.user,
     groupchat: false,
-    userverified: true,
   }).populate("member", "name avatar");
 
   const friend = chat.map((chats) => {
