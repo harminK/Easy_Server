@@ -13,14 +13,18 @@ dotenv.config({
 });
 
 const transport = createTransport({
-  // host: process.env.SMTP_HOST,
-  // port: process.env.SMTP_PORT,
-  // secure: false,
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   service: "gmail",
+  requireTLS: true,
   auth: {
     user: process.env.SMTP_MAIL,
     pass: process.env.SMTP_PASSWORD,
   },
+  connectionTimeout: 5000,
+  greetingTimeout: 5000,
+  socketTimeout: 5000,
 });
 
 const sendMail = (otpcode, email) => {
@@ -85,7 +89,7 @@ const uploadFilesToCloudeinary = async (files = []) => {
             return reject(error);
           }
           resolve(result);
-        }
+        },
       );
     });
   });
