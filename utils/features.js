@@ -13,18 +13,18 @@ dotenv.config({
 });
 
 const transport = createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  // host: "smtp.gmail.com",
+  // port: 587,
+  // secure: false,
   service: "gmail",
-  requireTLS: true,
+  // requireTLS: true,
   auth: {
     user: process.env.SMTP_MAIL,
     pass: process.env.SMTP_PASSWORD,
   },
-  connectionTimeout: 5000,
-  greetingTimeout: 5000,
-  socketTimeout: 5000,
+  // connectionTimeout: 5000,
+  // greetingTimeout: 5000,
+  // socketTimeout: 5000,
 });
 
 const sendMail = (otpcode, email) => {
