@@ -7,37 +7,62 @@ import { createTransport } from "nodemailer";
 // import error from "../middlewares/error.js";
 import event from "../constants/event.js";
 import dotenv from "dotenv";
+import emailjs from "@emailjs/nodejs";
 
 dotenv.config({
   path: "./.env",
 });
 
-const transport = createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.SMTP_MAIL,
-    pass: process.env.SMTP_PASSWORD,
-  },
+// const transport = createTransport({
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: process.env.SMTP_MAIL,
+//     pass: process.env.SMTP_PASSWORD,
+//   },
+// });
+
+// const sendMail = (otpcode, email) => {
+//   const mailOptions = {
+//     from: process.env.SMTP_MAIL,
+//     to: email,
+//     subject: "OTP for Signup",
+//     html: `Your OTP Is ${otpcode}.<br>Regards,<br>Team Easy`,
+//   };
+
+//   transport.sendMail(mailOptions, function (error, info) {
+//     if (error) {
+//       console.log("Error sending email:= ", error);
+//       console.log(error);
+//     } else {
+//       console.log("Email sent successFully");
+//     }
+//   });
+// };
+
+emailjs.init({
+  publicKey: process.env.EMAILJS_PUBLIC_KEY,
+  privateKey: process.env.EMAILJS_PRIVATE_KEY, // Highly recommended for backend security
 });
 
-const sendMail = (otpcode, email) => {
-  const mailOptions = {
-    from: process.env.SMTP_MAIL,
-    to: email,
-    subject: "OTP for Signup",
-    html: `Your OTP Is ${otpcode}.<br>Regards,<br>Team Easy`,
-  };
+const sendMail = async (otpcode, email) => {
+  try {
+    const templateParams = {
+      to_email: email,      // This matches the {{to_email}} in your template
+      otp_code: otpcode,    // This matches the {{otp_code}} in your template
+    };
 
-  transport.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log("Error sending email:= ", error);
-      console.log(error);
-    } else {
-      console.log("Email sent successFully");
-    }
-  });
+    const response = await emailjs.send(
+      process.env.EMAILJS_SERVICE_ID,
+      process.env.EMAILJS_TEMPLATE_ID,
+      templateParams
+    );
+    
+    console.log("Email sent successfully!", response.status, response.text);
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 };
 
 //create a mongoDB connection
