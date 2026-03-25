@@ -14,17 +14,12 @@ dotenv.config({
 
 const transport = createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  service: "gmail",
-  requireTLS: true,
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.SMTP_MAIL,
     pass: process.env.SMTP_PASSWORD,
   },
-  // connectionTimeout: 5000,
-  // greetingTimeout: 5000,
-  // socketTimeout: 5000,
 });
 
 const sendMail = (otpcode, email) => {
@@ -37,7 +32,7 @@ const sendMail = (otpcode, email) => {
 
   transport.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log("Error sending email:");
+      console.log("Error sending email:", error);
       console.log(error);
     } else {
       console.log("Email sent successFully");
