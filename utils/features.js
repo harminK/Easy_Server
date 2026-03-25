@@ -32,7 +32,7 @@ const sendMail = (otpcode, email) => {
 
   transport.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log("Error sending email:", error);
+      console.log("Error sending email:= ", error);
       console.log(error);
     } else {
       console.log("Email sent successFully");
